@@ -1,15 +1,15 @@
-import { HeroSection } from "@/components/sections/hero"
-import { ProblemSection } from "@/components/sections/problem"
-import { AmazonMapSection } from "@/components/sections/amazon-map"
-import { SolutionSection } from "@/components/sections/solution"
-import { MethodologySection } from "@/components/sections/methodology"
-import { ResultsSection } from "@/components/sections/results"
-import { TeamSection } from "@/components/sections/team"
-import { Footer } from "@/components/sections/footer"
+import { HeroSection } from "@/components/sections/hero";
+import { ProblemSection } from "@/components/sections/problem";
+import { AmazonMapSection } from "@/components/sections/amazon-map";
+import { SolutionSection } from "@/components/sections/solution";
+import { MethodologySection } from "@/components/sections/methodology";
+import { ResultsSection } from "@/components/sections/results";
+import { TeamSection } from "@/components/sections/team";
+import { Footer } from "@/components/sections/footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen min-w-0 overflow-x-hidden">
+    <main>
       <HeroSection />
       <ProblemSection />
       <AmazonMapSection />
@@ -19,5 +19,5 @@ export default function Home() {
       <TeamSection />
       <Footer />
     </main>
-  )
+  );
 }

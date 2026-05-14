@@ -1,103 +1,72 @@
-import { CheckCircle2, Clock, Leaf, Quote, TrendingUp } from "lucide-react"
+"use client";
 
-const results = [
-  {
-    icon: Clock,
-    title: "Detecção em Tempo Real",
-    description: "Identificação instantânea de atividades suspeitas através do processamento local de áudio.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Alta Eficiência",
-    description: "Redução significativa de falsos positivos através de redes neurais treinadas especificamente para o contexto amazônico.",
-  },
-  {
-    icon: Leaf,
-    title: "Sustentabilidade",
-    description: "Baixo consumo energético permite operação prolongada com baterias ou energia solar.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Autonomia Total",
-    description: "Funcionamento independente de internet, ideal para áreas remotas sem infraestrutura de conectividade.",
-  },
-]
+import { motion } from "framer-motion";
+
+const RESULTS = [
+  { n: "R.01", title: "Detecção em Tempo Real", sub: "Identificação instantânea de atividades suspeitas através do processamento local de áudio.", tags: "Real-time" },
+  { n: "R.02", title: "Alta Eficiência", sub: "Redução significativa de falsos positivos via redes neurais treinadas para o contexto amazônico.", tags: "Precisão" },
+  { n: "R.03", title: "Sustentabilidade", sub: "Baixo consumo energético permite operação prolongada com baterias ou energia solar.", tags: "Solar · Bateria" },
+  { n: "R.04", title: "Autonomia Total", sub: "Funcionamento independente de internet — ideal para áreas remotas sem infraestrutura.", tags: "Offline" },
+];
+
+const fade = {
+  initial: { opacity: 0, y: 50 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+};
 
 export function ResultsSection() {
   return (
-    <section id="resultados" className="py-9 sm:py-20 md:py-32 px-3.5 sm:px-6 bg-secondary/30">
-      <div className="max-w-6xl mx-auto w-full min-w-0">
-        <div className="text-center mb-7 sm:mb-14 md:mb-16 max-sm:max-w-md max-sm:mx-auto">
-          <span className="text-primary text-xs sm:text-sm font-semibold tracking-wider uppercase mb-2 sm:mb-4 block">
-            Resultados Esperados
-          </span>
-          <h2 className="text-xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-6 text-balance px-1 leading-snug">
-            Impacto e Benefícios
-          </h2>
-          <p className="text-muted-foreground text-[13px] sm:text-base md:text-lg max-w-3xl mx-auto leading-snug sm:leading-relaxed px-1">
-            O CAIPORA demonstra o potencial da tecnologia como aliada na preservação ambiental, 
-            oferecendo monitoramento inteligente, processamento em tempo real e comunicação eficiente.
-          </p>
-        </div>
+    <section id="resultados" className="ed-section ed-section-white">
+      <div className="ed-container ed-grid ed-grid-12">
+        <motion.div {...fade} className="md:col-span-3">
+          <h2 className="ed-label">Impacto</h2>
+        </motion.div>
 
-        <div className="mb-8 grid grid-cols-2 gap-2 sm:mb-14 sm:gap-6 md:mb-16 lg:grid-cols-4">
-          {results.map((result) => (
-            <div
-              key={result.title}
-              className="flex min-w-0 flex-col gap-2 rounded-lg border border-border bg-card/95 p-2.5 transition-all duration-300 hover:border-primary/40 max-sm:border-border/60 sm:flex-row sm:gap-4 sm:rounded-2xl sm:p-6"
-            >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-primary/25 bg-primary/15 sm:h-12 sm:w-12 sm:rounded-xl">
-                <result.icon className="h-3.5 w-3.5 text-primary sm:h-6 sm:w-6" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="mb-0.5 text-[11px] font-semibold leading-tight text-card-foreground sm:mb-2 sm:text-lg">
-                  {result.title}
-                </h3>
-                <p className="text-[9px] leading-snug text-muted-foreground max-sm:line-clamp-6 sm:text-base sm:leading-relaxed">
-                  {result.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <div className="md:col-span-9 flex flex-col gap-14 md:gap-20">
+          <motion.div {...fade}>
+            <p className="ed-h-large">
+              Impacto<br />
+              <span className="italic-em font-normal">e</span> benefícios.
+            </p>
+          </motion.div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-primary/25 bg-card p-4 shadow-[inset_0_1px_0_0_color-mix(in_oklch,var(--primary)_25%,transparent)] sm:p-8 md:p-10">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
-          <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/10 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full bg-accent/10 blur-2xl" />
-
-          <div className="relative flex max-sm:flex-col max-sm:items-start max-sm:gap-3 sm:items-start sm:gap-5">
-            <div className="flex shrink-0 items-center gap-2 sm:flex-col sm:items-center sm:gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/35 bg-primary/15 sm:h-14 sm:w-14 sm:rounded-2xl">
-                <Leaf className="h-5 w-5 text-primary sm:h-7 sm:w-7" />
-              </div>
-              <Quote className="hidden h-8 w-8 text-primary/35 sm:block" aria-hidden />
-            </div>
-
-            <div className="min-w-0 flex-1 space-y-3 sm:space-y-4">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary sm:text-xs">
-                  Encerramento
-                </p>
-                <h3 className="mt-1 text-lg font-bold tracking-tight text-foreground sm:text-2xl">
-                  Considerações finais
-                </h3>
-              </div>
-
-              <p className="border-l-2 border-primary/40 pl-3 text-[13px] leading-relaxed text-muted-foreground sm:border-l-4 sm:pl-4 sm:text-base">
-                O CAIPORA propõe monitoramento ambiental em áreas remotas da Amazônia, reunindo IoT,
-                inteligência artificial e computação de borda para análise bioacústica e detecção de
-                atividades ilegais.
-              </p>
-              <p className="text-[13px] leading-relaxed text-muted-foreground/95 sm:text-base">
-                O projeto segue em desenvolvimento: falta validação em campo, mais dados e testes
-                reais. Mesmo assim, abre caminho para novos usos e para proteger melhor a
-                biodiversidade da região.
-              </p>
-            </div>
+          <div className="flex flex-col">
+            {RESULTS.map((r, i) => (
+              <motion.div
+                key={r.n}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+                className="ed-row"
+                data-hover
+              >
+                <span className="ed-mono opacity-50 self-start" style={{ paddingTop: "0.4rem" }}>{r.n}</span>
+                <div>
+                  <p className="ed-h-row">{r.title}</p>
+                  <p className="mt-3 text-sm md:text-base text-black/55 leading-relaxed max-w-xl">{r.sub}</p>
+                </div>
+                <span className="ed-row-tags">{r.tags}</span>
+              </motion.div>
+            ))}
           </div>
+
+          <motion.div {...fade} className="border-t border-black/15 pt-12">
+            <h3 className="ed-label mb-8">Encerramento</h3>
+            <p className="italic-em text-2xl md:text-3xl lg:text-4xl leading-snug max-w-3xl mb-6">
+              O CAIPORA propõe monitoramento ambiental em áreas remotas da Amazônia,
+              reunindo IoT, IA e computação de borda para detectar atividades ilegais.
+            </p>
+            <p className="text-base md:text-lg text-black/60 leading-relaxed max-w-2xl">
+              O projeto segue em desenvolvimento — falta validação em campo, mais dados
+              e testes reais. Mesmo assim, abre caminho para novos usos e para proteger
+              melhor a biodiversidade da região.
+            </p>
+          </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }

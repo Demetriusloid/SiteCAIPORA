@@ -1,16 +1,8 @@
-"use client"
+"use client";
 
-import { useCallback, useEffect, useState } from "react"
-import { Users, GraduationCap, BookOpen } from "lucide-react"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi,
-} from "@/components/ui/carousel"
-import { cn } from "@/lib/utils"
+import { motion } from "framer-motion";
 
-const teamMembers = [
+const MEMBERS = [
   "Ana Kelly de Oliveira Monteiro",
   "Ana Paula Marques Cardoso",
   "Calebe de Freitas Lima",
@@ -37,147 +29,81 @@ const teamMembers = [
   "Thomas Araujo de Souza",
   "Wallesson Cesar Santos Vinhote",
   "Yan de Araújo Lima",
-]
+];
 
-/** Parte a lista em 4 grupos (tamanhos o mais uniformes possível). */
-function chunkIntoFour<T>(arr: readonly T[]): T[][] {
-  const n = arr.length
-  const base = Math.floor(n / 4)
-  const remainder = n % 4
-  const chunks: T[][] = []
-  let start = 0
-  for (let i = 0; i < 4; i++) {
-    const size = base + (i < remainder ? 1 : 0)
-    chunks.push(arr.slice(start, start + size) as T[])
-    start += size
-  }
-  return chunks
-}
+const META: [string, string][] = [
+  ["01. Curso", "Engenharia de Software"],
+  ["02. Orientador", "Josue Froner Freitas"],
+  ["03. Instituição", "Fametro · Inovatech 2026"],
+];
 
-const teamSlides = chunkIntoFour(teamMembers)
-
-let _memberStart = 1
-const teamSlideLabels = teamSlides.map((slide) => {
-  const end = _memberStart + slide.length - 1
-  const label = `Membros ${_memberStart} a ${end}`
-  _memberStart = end + 1
-  return label
-})
+const fade = {
+  initial: { opacity: 0, y: 60 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+};
 
 export function TeamSection() {
-  const [api, setApi] = useState<CarouselApi>()
-  const [active, setActive] = useState(0)
-
-  const onSelect = useCallback((carousel: CarouselApi | undefined) => {
-    if (!carousel) return
-    setActive(carousel.selectedScrollSnap())
-  }, [])
-
-  useEffect(() => {
-    if (!api) return
-    onSelect(api)
-    api.on("select", onSelect)
-    return () => {
-      api.off("select", onSelect)
-    }
-  }, [api, onSelect])
-
   return (
-    <section id="equipe" className="py-9 sm:py-20 md:py-32 px-3.5 sm:px-6">
-      <div className="max-w-6xl mx-auto w-full min-w-0">
-        <div className="text-center mb-7 sm:mb-14 md:mb-16 max-sm:max-w-md max-sm:mx-auto">
-          <span className="text-primary text-xs sm:text-sm font-semibold tracking-wider uppercase mb-2 sm:mb-4 block">
-            Equipe
-          </span>
-          <h2 className="text-xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-6 text-balance px-1 leading-snug">
-            Quem Está Por Trás
-          </h2>
-          <p className="text-muted-foreground text-[13px] sm:text-base md:text-lg max-w-3xl mx-auto leading-snug sm:leading-relaxed px-1">
-            Projeto desenvolvido por estudantes do curso de Engenharia de Software, unidos pelo
-            propósito de utilizar a tecnologia para a preservação ambiental.
-          </p>
-        </div>
+    <section id="equipe" className="ed-section ed-section-black">
+      <div className="ed-container ed-grid ed-grid-12">
+        <motion.div {...fade} className="md:col-span-3">
+          <h2 className="ed-label">Coletivo</h2>
+        </motion.div>
 
-        <div className="grid sm:grid-cols-2 gap-2.5 sm:gap-6 mb-6 sm:mb-12">
-          <div className="p-3 sm:p-6 rounded-lg sm:rounded-2xl bg-card/95 max-sm:border-border/60 border border-border min-w-0">
-            <div className="flex items-center gap-3 mb-2 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md sm:rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center shrink-0">
-                <GraduationCap className="w-4 h-4 sm:w-6 sm:h-6 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-semibold text-card-foreground">Curso</h3>
-                <p className="text-muted-foreground text-[13px] sm:text-base">Engenharia de Software</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-3 sm:p-6 rounded-lg sm:rounded-2xl bg-card/95 max-sm:border-border/60 border border-border min-w-0">
-            <div className="flex items-center gap-3 mb-2 sm:mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md sm:rounded-xl bg-destructive/10 border border-destructive/25 flex items-center justify-center shrink-0">
-                <BookOpen className="w-4 h-4 sm:w-6 sm:h-6 text-destructive" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-semibold text-card-foreground">Orientador</h3>
-                <p className="text-muted-foreground text-[13px] sm:text-base">Josue Froner Freitas</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="md:col-span-9 flex flex-col gap-14 md:gap-20">
+          <motion.div {...fade}>
+            <p className="ed-h-large">
+              Quem está<br />
+              <span className="italic-em font-normal">por</span> trás.
+            </p>
+            <p className="mt-6 text-sm md:text-base text-white/55 max-w-2xl tracking-wide leading-relaxed">
+              Projeto desenvolvido por estudantes do curso de Engenharia de Software,
+              unidos pelo propósito de utilizar tecnologia para preservação ambiental.
+            </p>
+          </motion.div>
 
-        <div className="p-3 sm:p-6 md:p-8 rounded-lg sm:rounded-2xl bg-card/95 max-sm:border-border/60 border border-border min-w-0">
-          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-6">
-            <Users className="w-4 h-4 sm:w-6 sm:h-6 text-primary shrink-0" />
-            <h3 className="text-base sm:text-xl font-semibold text-card-foreground">Membros da Equipe</h3>
-          </div>
-
-          <div className="sm:hidden -mx-0.5">
-            <Carousel setApi={setApi} opts={{ loop: false, align: "start" }} className="w-full">
-              <CarouselContent className="-ml-2">
-                {teamSlides.map((slideMembers, slideIndex) => (
-                  <CarouselItem key={slideIndex} className="pl-2 basis-full">
-                    <div className="grid grid-cols-1 gap-1.5">
-                      {slideMembers.map((member) => (
-                        <div
-                          key={member}
-                          className="rounded-md bg-secondary/50 px-2.5 py-2 text-left text-[11px] leading-snug text-foreground break-words"
-                        >
-                          {member}
-                        </div>
-                      ))}
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-            <div className="mt-3 flex justify-center gap-1.5" role="tablist" aria-label="Páginas da lista">
-              {teamSlides.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  role="tab"
-                  aria-selected={active === i}
-                  aria-label={teamSlideLabels[i] ?? `Grupo ${i + 1} de 4`}
-                  className={cn(
-                    "h-1.5 rounded-full transition-all",
-                    active === i ? "w-5 bg-primary" : "w-1.5 bg-muted-foreground/35",
-                  )}
-                  onClick={() => api?.scrollTo(i)}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-            {teamMembers.map((member) => (
-              <div
-                key={member}
-                className="px-3 py-2.5 sm:px-4 sm:py-3 rounded-lg bg-secondary/50 text-xs sm:text-sm text-foreground leading-snug break-words hover:bg-secondary transition-colors"
+          <div className="flex flex-col">
+            {META.map(([k, v], i) => (
+              <motion.div
+                key={k}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: i * 0.07 }}
+                className="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-10 border-t border-white/20 py-6 md:py-7 last:border-b last:border-white/20"
               >
-                {member}
-              </div>
+                <div className="md:col-span-3"><span className="ed-label opacity-90">{k}</span></div>
+                <div className="md:col-span-9"><p className="ed-h-row">{v}</p></div>
+              </motion.div>
             ))}
           </div>
+
+          <motion.div {...fade}>
+            <div className="flex items-baseline justify-between mb-8">
+              <h3 className="ed-label opacity-90">— Integrantes</h3>
+              <span className="ed-mono opacity-50">{String(MEMBERS.length).padStart(2, "0")} pessoas</span>
+            </div>
+            <div className="flex flex-col">
+              {MEMBERS.map((m, i) => (
+                <motion.div
+                  key={m}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-20px" }}
+                  transition={{ duration: 0.5, ease: "easeOut", delay: Math.min(i * 0.025, 0.6) }}
+                  className="grid grid-cols-[40px_1fr] md:grid-cols-[80px_1fr] items-baseline gap-4 border-t border-white/15 py-3 md:py-4 last:border-b last:border-white/15 hover:bg-white/[0.03] transition-colors duration-300"
+                  data-hover
+                >
+                  <span className="ed-mono opacity-50">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-sans font-semibold text-lg md:text-2xl tracking-tight">{m}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }

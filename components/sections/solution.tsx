@@ -1,178 +1,101 @@
-"use client"
+"use client";
 
-import { useCallback, useEffect, useState } from "react"
-import { Cpu, Radio, Brain, Zap, Waves, Shield } from "lucide-react"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi,
-} from "@/components/ui/carousel"
-import { cn } from "@/lib/utils"
+import { motion } from "framer-motion";
 
-const features = [
+const FEATURES = [
   {
-    icon: Waves,
+    n: "F.01",
     title: "Análise Bioacústica",
-    body: "O sistema captura sons do ambiente através de um microfone digital de alta fidelidade (INMP441) e os converte em espectrogramas para análise por redes neurais.",
-    bullets: ["Detecção de motosserras", "Identificação de disparos", "Sons naturais vs. suspeitos"],
+    sub: "Microfone digital INMP441 de alta fidelidade capta sons da mata e os converte em espectrogramas para análise por redes neurais.",
+    tags: "Motosserra · Disparos",
   },
   {
-    icon: Brain,
-    title: "Inteligência Artificial",
-    body: "Redes Neurais Convolucionais (CNN) treinadas com TinyML permitem reconhecer padrões sonoros diretamente no dispositivo.",
-    bullets: ["Tempo real", "Alta precisão", "Menos falsos positivos"],
+    n: "F.02",
+    title: "IA Embarcada",
+    sub: "Redes Neurais Convolucionais treinadas com TinyML reconhecem padrões sonoros direto no dispositivo, em tempo real.",
+    tags: "CNN · TinyML",
   },
   {
-    icon: Cpu,
-    title: "Computação de Borda",
-    body: "O ESP32 processa tudo localmente, sem depender de internet constante, com autonomia total.",
-    bullets: ["Baixo consumo", "Sem internet obrigatória", "Operação autônoma"],
+    n: "F.03",
+    title: "Processamento Local",
+    sub: "ESP32 processa tudo localmente, sem depender de internet. Autonomia completa, baixo consumo.",
+    tags: "ESP32 · Edge",
   },
   {
-    icon: Radio,
-    title: "Comunicação LoRa",
-    body: "LoRa envia alertas a longa distância com pouca energia, ideal para áreas remotas.",
-    bullets: ["Alcance em km", "Alertas em tempo real", "Eficiência energética"],
+    n: "F.04",
+    title: "Rede LoRa",
+    sub: "LoRa envia alertas a longa distância com pouca energia, ideal para áreas remotas onde nenhuma outra rede chega.",
+    tags: "Long Range · Low Power",
   },
-] as const
+];
 
-const highlights = [
-  { icon: Zap, label: "Baixo", sub: "Consumo energético", className: "text-accent" },
-  { icon: Shield, label: "Alta", sub: "Precisão", className: "text-primary" },
-  { icon: Radio, label: "Longo", sub: "Alcance", className: "text-destructive" },
-  { icon: Cpu, label: "100%", sub: "Autônomo", className: "text-accent" },
-] as const
+const HIGHLIGHTS = [
+  ["Baixo", "Consumo"],
+  ["Alta", "Precisão"],
+  ["Longo", "Alcance"],
+  ["100%", "Autônomo"],
+];
 
-const AUTOPLAY_MS = 6000
-
-function FeatureCard({ item }: { item: (typeof features)[number] }) {
-  return (
-    <div className="flex h-full flex-col rounded-lg border border-border bg-card/95 p-3.5 sm:p-7 md:p-8">
-      <div className="mb-3 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-center sm:gap-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 sm:h-12 sm:w-12 sm:rounded-xl">
-          <item.icon className="h-5 w-5 text-primary sm:h-6 sm:w-6" />
-        </div>
-        <h3 className="text-base font-semibold text-card-foreground sm:text-xl">{item.title}</h3>
-      </div>
-      <p className="mb-3 flex-1 text-[13px] leading-snug text-muted-foreground sm:mb-4 sm:text-base sm:leading-relaxed">
-        {item.body}
-      </p>
-      <ul className="space-y-1.5 text-[13px] text-muted-foreground sm:space-y-2 sm:text-sm">
-        {item.bullets.map((b) => (
-          <li key={b} className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            {b}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+const fade = {
+  initial: { opacity: 0, y: 50 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+};
 
 export function SolutionSection() {
-  const [featApi, setFeatApi] = useState<CarouselApi>()
-  const [featActive, setFeatActive] = useState(0)
-
-  const onFeatSelect = useCallback((api: CarouselApi | undefined) => {
-    if (!api) return
-    setFeatActive(api.selectedScrollSnap())
-  }, [])
-
-  useEffect(() => {
-    if (!featApi) return
-    onFeatSelect(featApi)
-    featApi.on("select", onFeatSelect)
-    return () => {
-      featApi.off("select", onFeatSelect)
-    }
-  }, [featApi, onFeatSelect])
-
-  useEffect(() => {
-    if (!featApi) return
-    let id: number | undefined
-    const arm = () => {
-      if (id !== undefined) window.clearInterval(id)
-      id = window.setInterval(() => {
-        featApi.scrollNext()
-      }, AUTOPLAY_MS)
-    }
-    arm()
-    featApi.on("select", arm)
-    return () => {
-      if (id !== undefined) window.clearInterval(id)
-      featApi.off("select", arm)
-    }
-  }, [featApi])
-
   return (
-    <section id="solucao" className="py-9 sm:py-20 md:py-32 px-3.5 sm:px-6 bg-secondary/30">
-      <div className="max-w-6xl mx-auto w-full min-w-0">
-        <div className="text-center mb-7 sm:mb-14 md:mb-16 max-sm:max-w-md max-sm:mx-auto">
-          <span className="text-primary text-xs sm:text-sm font-semibold tracking-wider uppercase mb-2 sm:mb-4 block">
-            A Solução
-          </span>
-          <h2 className="text-xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-6 text-balance px-1 leading-snug">
-            Tecnologia a Favor da Natureza
-          </h2>
-          <p className="text-muted-foreground text-[13px] sm:text-base md:text-lg max-w-3xl mx-auto leading-snug sm:leading-relaxed px-1">
-            O CAIPORA integra Internet das Coisas, Inteligência Artificial e Computação de Borda para
-            criar um sistema autônomo de vigilância ambiental baseado em análise bioacústica.
-          </p>
-        </div>
+    <section id="solucao" className="ed-section ed-section-white">
+      <div className="ed-container ed-grid ed-grid-12">
+        <motion.div {...fade} className="md:col-span-3">
+          <h2 className="ed-label">A Solução</h2>
+        </motion.div>
 
-        <div className="sm:hidden -mx-0.5 mb-5">
-          <Carousel
-            setApi={setFeatApi}
-            opts={{ loop: true, align: "start", dragFree: false }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-3">
-              {features.map((item) => (
-                <CarouselItem key={item.title} className="pl-3 basis-[88%]">
-                  <FeatureCard item={item} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-          <div className="mt-3 flex justify-center gap-1.5" aria-label="Indicadores do carrossel">
-            {features.map((item, i) => (
-              <button
-                key={item.title}
-                type="button"
-                aria-label={item.title}
-                aria-current={featActive === i}
-                className={cn(
-                  "h-1.5 rounded-full transition-all",
-                  featActive === i ? "w-6 bg-primary" : "w-1.5 bg-muted-foreground/35",
-                )}
-                onClick={() => featApi?.scrollTo(i)}
-              />
+        <div className="md:col-span-9 flex flex-col gap-14 md:gap-20">
+          <motion.div {...fade}>
+            <p className="ed-h-large">
+              Tecnologia<br />
+              <span className="italic-em font-normal">a favor</span> da floresta.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col">
+            {FEATURES.map((f, i) => (
+              <motion.div
+                key={f.n}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: i * 0.06 }}
+                className="ed-row"
+                data-hover
+              >
+                <span className="ed-mono opacity-50 self-start" style={{ paddingTop: "0.4rem" }}>{f.n}</span>
+                <div>
+                  <p className="ed-h-row">{f.title}</p>
+                  <p className="mt-3 text-sm md:text-base text-black/55 leading-relaxed max-w-xl">{f.sub}</p>
+                </div>
+                <span className="ed-row-tags">{f.tags}</span>
+              </motion.div>
             ))}
           </div>
-        </div>
 
-        <div className="mb-8 hidden sm:mb-14 sm:block md:mb-16">
-          <div className="grid sm:grid-cols-2 gap-3 sm:gap-6 md:gap-8">
-            {features.map((item) => (
-              <FeatureCard key={item.title} item={item} />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6 border-t border-black/15 pt-12">
+            {HIGHLIGHTS.map(([k, v], i) => (
+              <motion.div
+                key={v}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.7, ease: "easeOut", delay: i * 0.07 }}
+              >
+                <p className="ed-h-large" style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}>{k}</p>
+                <p className="ed-mono opacity-55 mt-2">{v}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-4 md:gap-6">
-          {highlights.map((h) => (
-            <div
-              key={h.sub}
-              className="flex min-w-0 flex-col items-center rounded-md border border-border bg-card/95 p-2.5 text-center sm:rounded-xl sm:p-5 md:p-6"
-            >
-              <h.icon className={cn("mb-1.5 h-6 w-6 sm:mb-3 sm:h-8 sm:w-8", h.className)} />
-              <div className="text-lg font-bold text-foreground sm:text-2xl">{h.label}</div>
-              <div className="text-[10px] text-muted-foreground leading-tight sm:text-sm">{h.sub}</div>
-            </div>
-          ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

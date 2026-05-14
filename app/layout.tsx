@@ -1,57 +1,61 @@
-import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { MobilePreviewClient } from '@/components/mobile-preview-client'
-import './globals.css'
+import type { Metadata, Viewport } from "next";
+import { Inter, Playfair_Display, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import BrandLogo from "@/components/layout/BrandLogo";
+import Navigation from "@/components/layout/Navigation";
+import ForestOverlay from "@/components/layout/ForestOverlay";
+import ProgressBar from "@/components/layout/ProgressBar";
+import "./globals.css";
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const sans = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-sans-next",
+  display: "swap",
+});
+const serif = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif-next",
+  display: "swap",
+});
+const mono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono-next",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
-  viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0f1915' },
-    { media: '(prefers-color-scheme: light)', color: '#0f1915' },
-  ],
-}
+  viewportFit: "cover",
+  themeColor: "#050505",
+};
 
 export const metadata: Metadata = {
-  title: 'CAIPORA - Monitoramento Ambiental Inteligente',
-  description: 'Sistema de vigilância ambiental da Amazônia utilizando IoT, Inteligência Artificial e análise bioacústica para combater o desmatamento e a caça ilegal.',
-  generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
-}
+  title: "CAIPORA · Vigilância acústica para a Amazônia",
+  description:
+    "Sistema autônomo de monitoramento ambiental — IoT, IA de borda e bioacústica para combater desmatamento e caça ilegal em tempo real.",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className="bg-background overflow-x-hidden">
-      <body className="font-sans antialiased bg-background min-w-0 touch-manipulation">
-        <MobilePreviewClient />
+    <html
+      lang="pt-BR"
+      className={`${sans.variable} ${serif.variable} ${mono.variable}`}
+    >
+      <body>
+        <ForestOverlay />
+        <ProgressBar />
+        <BrandLogo />
+        <Navigation />
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
-  )
+  );
 }
